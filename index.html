@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="JStutorial">
+    <meta name="author" content="zdf">
+
+    <title>demo</title>
+
+    <link href="css/prettify.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/overall.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="js/prettify.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="tut-masthead">
+      <div class="container">
+        <nav class="tut-nav">
+          <a class="tut-nav-item active" href="#">序言</a>
+          <a class="tut-nav-item" href="#">正文</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 main">
+                <h4>DEMO: <span class="small">code</span></h4>
+                这是第一行；<br />
+                施工中施工中。
+
+<pre class="prettyprint linenums">
+(function( window, undefined ) {
+var
+    // A central reference to the root jQuery(document)
+    rootjQuery,
+
+    // The deferred used on DOM ready
+    readyList,
+
+    // Use the correct document accordingly with window argument (sandbox)
+    document = window.document,
+    location = window.location,
+    navigator = window.navigator,
+
+    // Map over jQuery in case of overwrite
+    _jQuery = window.jQuery,
+
+    // Map over the $ in case of overwrite
+    _$ = window.$,
+
+    // Save a reference to some core methods
+    core_push = Array.prototype.push,
+    core_slice = Array.prototype.slice,
+    core_indexOf = Array.prototype.indexOf,
+    core_toString = Object.prototype.toString,
+    core_hasOwn = Object.prototype.hasOwnProperty,
+    core_trim = String.prototype.trim,
+
+    // Define a local copy of jQuery
+    jQuery = function( selector, context ) {
+        // The jQuery object is actually just the init constructor 'enhanced'
+        return new jQuery.fn.init( selector, context, rootjQuery );
+    },
+
+    // Used for matching numbers
+    core_pnum = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source,
+
+    // Used for detecting and trimming whitespace
+    core_rnotwhite = /\S/,
+    core_rspace = /\s+/,
+
+    // Make sure we trim BOM and NBSP (here's looking at you, Safari 5.0 and IE)
+    rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
+
+    // A simple way to check for HTML strings
+    // Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+    rquickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/,
+
+    // Match a standalone tag
+    rsingleTag = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
+
+    // JSON RegExp
+    rvalidchars = /^[\],:{}\s]*$/,
+    rvalidbraces = /(?:^|:|,)(?:\s*\[)+/g,
+    rvalidescape = /\\(?:["\\\/bfnrt]|u[\da-fA-F]{4})/g,
+    rvalidtokens = /"[^"\\\r\n]*"|true|false|null|-?(?:\d\d*\.|)\d+(?:[eE][\-+]?\d+|)/g,
+
+    // Matches dashed string for camelizing
+    rmsPrefix = /^-ms-/,
+    rdashAlpha = /-([\da-z])/gi,
+
+    // Used by jQuery.camelCase as callback to replace()
+    fcamelCase = function( all, letter ) {
+        return ( letter + "" ).toUpperCase();
+    },
+
+    // The ready event handler and self cleanup method
+    DOMContentLoaded = function() {
+        if ( document.addEventListener ) {
+            document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+            jQuery.ready();
+        } else if ( document.readyState === "complete" ) {
+            // we're here because readyState === "complete" in oldIE
+            // which is good enough for us to call the dom ready!
+            document.detachEvent( "onreadystatechange", DOMContentLoaded );
+            jQuery.ready();
+        }
+    },
+
+    // [[Class]] -> type pairs
+    class2type = {};
+
+jQuery.fn = jQuery.prototype = {
+    constructor: jQuery,
+    init: function( selector, context, rootjQuery ) {
+        var match, elem, ret, doc;
+
+        // Handle $(""), $(null), $(undefined), $(false)
+        if ( !selector ) {
+            return this;
+        }
+
+        // Handle $(DOMElement)
+        if ( selector.nodeType ) {
+            this.context = this[0] = selector;
+            this.length = 1;
+            return this;
+        }
+
+        // Handle HTML strings
+        if ( typeof selector === "string" ) {
+            if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
+                // Assume that strings that start and end with <> are HTML and skip the regex check
+                match = [ null, selector, null ];
+
+            } else {
+                match = rquickExpr.exec( selector );
+            }
+
+            // Match html or make sure no context is specified for #id
+            if ( match && (match[1] || !context) ) {
+
+                // HANDLE: $(html) -> $(array)
+                if ( match[1] ) {
+                    context = context instanceof jQuery ? context[0] : context;
+                    doc = ( context && context.nodeType ? context.ownerDocument || context : document );
+
+                    // scripts is true for back-compat
+                    selector = jQuery.parseHTML( match[1], doc, true );
+                    if ( rsingleTag.test( match[1] ) && jQuery.isPlainObject( context ) ) {
+                        this.attr.call( selector, context, true );
+                    }
+
+                    return jQuery.merge( this, selector );
+
+                // HANDLE: $(#id)
+                } else {
+                    elem = document.getElementById( match[2] );
+
+                    // Check parentNode to catch when Blackberry 4.6 returns
+                    // nodes that are no longer in the document #6963
+                    if ( elem && elem.parentNode ) {
+                        // Handle the case where IE and Opera return items
+                        // by name instead of ID
+                        if ( elem.id !== match[2] ) {
+                            return rootjQuery.find( selector );
+                        }
+
+                        // Otherwise, we inject the element directly into the jQuery object
+                        this.length = 1;
+                        this[0] = elem;
+                    }
+
+                    this.context = document;
+                    this.selector = selector;
+                    return this;
+                }
+
+            // HANDLE: $(expr, $(...))
+            } else if ( !context || context.jquery ) {
+                return ( context || rootjQuery ).find( selector );
+
+            // HANDLE: $(expr, context)
+            // (which is just equivalent to: $(context).find(expr)
+            } else {
+                return this.constructor( context ).find( selector );
+            }
+
+        // HANDLE: $(function)
+        // Shortcut for document ready
+        } else if ( jQuery.isFunction( selector ) ) {
+            return rootjQuery.ready( selector );
+        }
+
+        if ( selector.selector !== undefined ) {
+            this.selector = selector.selector;
+            this.context = selector.context;
+        }
+
+        return jQuery.makeArray( selector, this );
+    },
+
+    // Start with an empty selector
+    selector: "",
+
+    // The current version of jQuery being used
+    jquery: "1.8.2",
+
+    // The default length of a jQuery object is 0
+    length: 0,
+
+    // The number of elements contained in the matched element set
+    size: function() {
+        return this.length;
+    },
+
+    toArray: function() {
+        return core_slice.call( this );
+    },
+
+    // Get the Nth element in the matched element set OR
+    // Get the whole matched element set as a clean array
+    get: function( num ) {
+        return num == null ?
+
+            // Return a 'clean' array
+            this.toArray() :
+
+            // Return just the object
+            ( num < 0 ? this[ this.length + num ] : this[ num ] );
+    },
+
+    // Take an array of elements and push it onto the stack
+    // (returning the new matched element set)
+    pushStack: function( elems, name, selector ) {
+
+        // Build a new jQuery matched element set
+        var ret = jQuery.merge( this.constructor(), elems );
+
+        // Add the old object onto the stack (as a reference)
+        ret.prevObject = this;
+
+        ret.context = this.context;
+
+        if ( name === "find" ) {
+            ret.selector = this.selector + ( this.selector ? " " : "" ) + selector;
+        } else if ( name ) {
+            ret.selector = this.selector + "." + name + "(" + selector + ")";
+        }
+
+        // Return the newly-formed element set
+        return ret;
+    },
+
+    // Execute a callback for every element in the matched set.
+    // (You can seed the arguments with an array of args, but this is
+    // only used internally.)
+    each: function( callback, args ) {
+        return jQuery.each( this, callback, args );
+    },
+
+    ready: function( fn ) {
+        // Add the callback
+        jQuery.ready.promise().done( fn );
+
+        return this;
+    },
+
+    eq: function( i ) {
+        i = +i;
+        return i === -1 ?
+            this.slice( i ) :
+            this.slice( i, i + 1 );
+    },
+
+    first: function() {
+        return this.eq( 0 );
+    },
+
+    last: function() {
+        return this.eq( -1 );
+    },
+
+    slice: function() {
+        return this.pushStack( core_slice.apply( this, arguments ),
+            "slice", core_slice.call(arguments).join(",") );
+    },
+
+    map: function( callback ) {
+        return this.pushStack( jQuery.map(this, function( elem, i ) {
+            return callback.call( elem, i, elem );
+        }));
+    },
+
+    end: function() {
+        return this.prevObject || this.constructor(null);
+    },
+
+    // For internal use only.
+    // Behaves like an Array's method, not like a jQuery method.
+    push: core_push,
+    sort: [].sort,
+    splice: [].splice
+};
+</pre>
+===============================
+
+
+            </div><!-- main -->
+            <div class="col-sm-2 col-sm-offfset-1 sidebar">
+                <div class="sidebar-module">
+                  <h4>Javascript基础</h4>
+                  <ol class="list-unstyled">
+                    <li><a href="#">March 2014</a></li>
+                    <li><a href="#">February 2014</a></li>
+                    <li><a href="#">January 2014</a></li>
+                    <li><a href="#">December 2013</a></li>
+                    <li><a href="#">November 2013</a></li>
+                    <li><a href="#">October 2013</a></li>
+                    <li><a href="#">September 2013</a></li>
+                    <li><a href="#">August 2013</a></li>
+                    <li><a href="#">July 2013</a></li>
+                    <li><a href="#">June 2013</a></li>
+                    <li><a href="#">May 2013</a></li>
+                    <li><a href="#">April 2013</a></li>
+                  </ol>
+                </div>
+
+                <div class="sidebar-module">
+                  <h4>jQuery速成指南</h4>
+                  <ol class="list-unstyled">
+                    <li><a href="#">March 2014</a></li>
+                    <li><a href="#">February 2014</a></li>
+                    <li><a href="#">January 2014</a></li>
+                    <li><a href="#">December 2013</a></li>
+                    <li><a href="#">November 2013</a></li>
+                    <li><a href="#">October 2013</a></li>
+                    <li><a href="#">September 2013</a></li>
+                    <li><a href="#">August 2013</a></li>
+                    <li><a href="#">July 2013</a></li>
+                    <li><a href="#">June 2013</a></li>
+                    <li><a href="#">May 2013</a></li>
+                    <li><a href="#">April 2013</a></li>
+                  </ol>
+                </div>
+            </div><!-- sidebar -->
+        </div><!-- row -->
+    </div><!-- container -->
+
+
+    <footer class="tut-footer">
+      <p></p>
+      <p>
+        <a href="#">返回顶部</a>
+      </p>
+    </footer>
+
+    <script src="js/bootstrap.js"></script>
+    <script type="text/javascript">
+    prettyPrint();
+    </script>
+  </body>
+</html>
