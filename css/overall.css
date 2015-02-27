@@ -65,6 +65,7 @@ h6, .h6 {
 .main {
   font-size: 15px;
   line-height: 1.2;
+  padding: 15px;
 }
 
 .sidebar-module {
