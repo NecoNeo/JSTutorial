@@ -28,7 +28,7 @@
     <div class="tut-masthead" id="top">
       <div class="container">
         <nav class="tut-nav">
-          <a class="tut-nav-item active" href="#">学习笔记</a>
+          <a class="tut-nav-item active" href="#">Javascript学习笔记</a>
         </nav>
       </div>
     </div>
@@ -36,16 +36,130 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-9 main">
+
                 <!-- 0 -->
-                <article id="c0">
-                    <h4>现在开始</h4>
+                <article id="c0" class="hide">
+                    <h3>现在开始</h3>
+                    <p>私藏的JS武功秘籍，修炼之后从此纵横江湖难觅敌手，欲练神功。。。</p>
                 </article>
-                <!-- 1 -->
-                <article id="c1-01" class="hide">121212</article>
-                <!-- 2 -->
+
+                <!-- Javascript运行环境 -->
+                <article id="c1-01">
+                    <h3>Javascript运行环境</h3>
+                    <p>客户端Javascript的运行环境就是浏览器，可以说浏览器就是一个迷你的操作系统了。作为脚本语言，解释运行的Javascript最大的特点就是不需要代码人员使用编译器，写出来的代码就能立刻见到结果。</p>
+                    <p>Javascript的调试是相对比较简单的，现代的浏览器一般都包含开发人员工具，<strong>浏览器缓存残留</strong>是比较常见的调试问题，在调试的时候切记缓存是否已经清理。</p>
+                    <p>常见的调试方法包括直接观察运行结果，给语句加断点等等，或者：</p>
+<pre class="prettyprint">
+alert(foo);
+console.log(bar);</pre>
+                </article>
+
+                <!-- 数据类型和变量 -->
                 <article id="c1-02" class="hide">
-                    <pre class="prettyprint">var a = function(){return 0;};</pre>
+                    <h3>数据类型和变量</h3>
+                    <p>这章介绍一下数据类型和变量。Javascript是弱类型语言意味着变量可能会随着程序的运行改变其类型。Javascript中的原始类型有：</p>
+                    <ul>
+                        <li>数字</li>
+                        <li>字符串</li>
+                        <li>布尔值</li>
+                        <li>null</li>
+                        <li>undefined</li>
+                    </ul>
+                    <p>除了以上这些其它的类型都是对象。</p>
+                    <h4>数字：</h4>
+                    <pre class="prettyprint">
+/*整数*/
+0
+3
+1000000
+0xff //十六进制(dec:255)
+0377 //八进制(dec:255)
+</pre>
+                    <p>一定要注意浮点数的四舍五入错误：</p>
+                    <pre class="prettyprint">
+(0.3 - 0.2 - 0.1) == 0 //=>false
+(1 - 0.5 - 0.5) == 0 //=>true
+</pre>
+                    <p>解决办法：在这些需要精确数值的地方使用整数。</p>
+                    <h4>字符串：</h4>
+                    <p>使用单引号或双引号对包括起来就能够成一个字符串。字符串最常用的操作就是拼接了，和Java一样使用“+”即可联结两个字符串，由于Javascript是弱类型语言，一个常见的问题就是将字符串的拼接和数字的加法运算混淆，这里尤其需要注意操作变量的数据类型。</p>
+                    <p>令一个常见问题是就是引号嵌套的错误，导致代码解释时字符串提前终止，这里的解决方法是使用不同的引号对或者转意字符。</p>
+                    <pre class="prettyprint">
+1 + 2 // =>3
+1 + "2" // =>"12"
+var s = "foo"bar""; // 错误
+var s = "foo\"bar\"";
+</pre>
+                    <p>关于字符串系统内置有五花八门的方法，这些都可以通过查阅手册得到，这里就举两个常用的；通俗的说字符串就是字符组成的数组，有很多字符串的方法也会在数组中看到。</p>
+                    <pre class="prettyprint">
+var s = "hello world"
+s.length // =>11
+s.split(" ") // => ["hello", "world"]分割字符串
+</pre>
+                    <p></p>
+
                 </article>
+
+                <!-- 值和引用 -->
+                <article id="c1-03" class="hide">
+                    <h3>值和引用</h3>
+                    <p>这里阐述一下我的理解。变量的值包含两种，前面提到过：原始值和对象。原始值不会给我们造成什么困惑，然而当变量的值是一个对象时，变量其实是指向该对象的一个引用：</p>
+                    <pre class="prettyprint linenums">
+var arrayA = [1, 2, 3],
+    arrayB = arrayA,
+    arrayC = [1, 2, 3];
+arrayA.pop();
+console.log(arrayA); // [1, 2]
+console.log(arrayB); // [1, 2]
+console.log(arrayC); // [1, 2, 3]
+</pre>
+                    <p>对象的比较和原始值的比较不同，它只判断作比较的对象是否为同一个对象</p>
+                    <pre class="prettyprint linenums">
+var arrayA = [1, 2, 3],
+    arrayB = arrayA,
+    arrayC = [1, 2, 3];
+arrayA == arrayB // =>true
+arrayA == arrayC // =>false
+//数组也是一种对象
+var o = {x: 1, y: 2},
+    b = {x: 1, y: 2};
+var j = o;
+o == b // =>false
+o == j // =>true
+</pre>
+                    <p></p>
+                </article>
+
+                <!-- this -->
+                <article id="c1-04" class="hide">
+                    <h3>this</h3>
+                </article>
+
+                <!-- 表达式和运算符 -->
+                <article id="c1-05" class="hide">
+                    <h3>表达式和运算符</h3>
+                </article>
+
+                <!-- 控制语句 -->
+                <article id="c1-06" class="hide">
+                    <h3>控制语句</h3>
+                </article>
+
+                <!-- 对象和数组 -->
+                <article id="c1-07" class="hide">
+                    <h3>对象和数组</h3>
+                </article>
+
+                <!-- 函数的闭包 -->
+                <article id="c1-08" class="hide">
+                    <h3>函数的闭包</h3>
+                </article>
+
+                <!-- Javascript的继承 -->
+                <article id="c1-09" class="hide">
+                    <h3>Javascript的继承</h3>
+                </article>
+
             </div><!-- main -->
             <div class="col-sm-2 col-sm-offfset-1 sidebar">
                 <div class="sidebar-module">
@@ -54,11 +168,12 @@
                     <li><a href="#" data-chapter="c1-01">Javascript运行环境</a></li>
                     <li><a href="#" data-chapter="c1-02">数据类型和变量</a></li>
                     <li><a href="#" data-chapter="c1-03">值和引用</a></li>
-                    <li><a href="#" data-chapter="c1-04">表达式和运算符</a></li>
-                    <li><a href="#" data-chapter="c1-05">控制语句</a></li>
-                    <li><a href="#" data-chapter="c1-06">对象和数组</a></li>
-                    <li><a href="#" data-chapter="c1-07">函数的闭包</a></li>
-                    <li><a href="#" data-chapter="c1-08">Javascript的继承</a></li>
+                    <li><a href="#" data-chapter="c1-04">this</a></li>
+                    <li><a href="#" data-chapter="c1-05">表达式和运算符</a></li>
+                    <li><a href="#" data-chapter="c1-06">控制语句</a></li>
+                    <li><a href="#" data-chapter="c1-07">对象和数组</a></li>
+                    <li><a href="#" data-chapter="c1-08">函数的闭包</a></li>
+                    <li><a href="#" data-chapter="c1-09">Javascript的继承</a></li>
                   </ol>
                 </div>
 
@@ -66,6 +181,13 @@
                   <h4>jQuery速成指南</h4>
                   <ol class="list-unstyled">
                     <li><a href="#" data-chapter="c2-01">什么是jQuery</a></li>
+                    <li><a href="#" data-chapter="c2-02">什么是jQuery对象</a></li>
+                    <li><a href="#" data-chapter="c2-03">什么是jQuery工具函数</a></li>
+                    <li><a href="#" data-chapter="c2-04">jQuery选择器简述</a></li>
+                    <li><a href="#" data-chapter="c2-05">常用jQuery方法</a></li>
+                    <li><a href="#" data-chapter="c2-06">jQueryAjax</a></li>
+                    <li><a href="#" data-chapter="c2-07">jQuery链式调用</a></li>
+                    <li><a href="#" data-chapter="c2-08">代码风格和命名规范</a></li>
                   </ol>
                 </div>
             </div><!-- sidebar -->
