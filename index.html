@@ -122,42 +122,337 @@ arrayA == arrayB // =>true
 arrayA == arrayC // =>false
 //数组也是一种对象
 var o = {x: 1, y: 2},
-    b = {x: 1, y: 2};
-var j = o;
+    b = {x: 1, y: 2},
+    j = o;
 o == b // =>false
 o == j // =>true
 </pre>
                     <p></p>
                 </article>
 
-                <!-- this -->
-                <article id="c1-04" class="hide">
-                    <h3>this</h3>
-                </article>
-
                 <!-- 表达式和运算符 -->
-                <article id="c1-05" class="hide">
+                <article id="c1-04" class="hide">
                     <h3>表达式和运算符</h3>
+                    <p>关于运算符这里直接摘抄一个现成的表格</p>
+                    <table style="width: 90%;" border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td width="117"><span style="font-size: 14px;">&nbsp;优先级</span></td>
+<td width="195"><span style="font-size: 14px;">&nbsp;运算符</span></td>
+<td width="215"><span style="font-size: 14px;">&nbsp;描述</span></td>
+<td width="83"><span style="font-size: 14px;">&nbsp;结合性</span></td>
+</tr>
+<tr>
+<td rowspan="21"><span style="font-size: 14px;">由高到低排序</span></td>
+<td><span style="font-size: 14px;">()</span></td>
+<td><span style="font-size: 14px;">括号</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">++ --</span></td>
+<td><span style="font-size: 14px;">递增或递减</span></td>
+<td><span style="font-size: 14px;">从右到左</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">!</span></td>
+<td><span style="font-size: 14px;">逻辑非</span></td>
+<td><span style="font-size: 14px;">从右到左</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">*&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;%</span></td>
+<td><span style="font-size: 14px;">乘法、除法、取模</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">+&nbsp;&nbsp;&nbsp;-</span></td>
+<td><span style="font-size: 14px;">加法、减法</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">+</span></td>
+<td><span style="font-size: 14px;">拼接</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;=</span></td>
+<td><span style="font-size: 14px;">小于、小于等于</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;=</span></td>
+<td><span style="font-size: 14px;">大于、大于等于</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">= =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!=</span></td>
+<td><span style="font-size: 14px;">等于、不等于</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">= = =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!= =</span></td>
+<td><span style="font-size: 14px;">等同（类型相同）、不等同</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">&amp;</span></td>
+<td><span style="font-size: 14px;">按位与</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">|</span></td>
+<td><span style="font-size: 14px;">按位或</span></td>
+<td><span style="font-size: 14px;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">^</span></td>
+<td><span style="font-size: 14px;">按位异或</span></td>
+<td><span style="font-size: 14px;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">~</span></td>
+<td><span style="font-size: 14px;">按位非</span></td>
+<td><span style="font-size: 14px;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">&lt;&lt;</span></td>
+<td><span style="font-size: 14px;">按位左移</span></td>
+<td><span style="font-size: 14px;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">&gt;&gt;</span></td>
+<td><span style="font-size: 14px;">按位右移</span></td>
+<td><span style="font-size: 14px;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">&gt;&gt;&gt;</span></td>
+<td><span style="font-size: 14px;">按位右移，左边以0填充</span></td>
+<td><span style="font-size: 14px;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">&amp;&amp;</span></td>
+<td><span style="font-size: 14px;">逻辑与</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">| |</span></td>
+<td><span style="font-size: 14px;">逻辑或</span></td>
+<td><span style="font-size: 14px;">从左到右</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">?:</span></td>
+<td><span style="font-size: 14px;">三元条件表达式</span></td>
+<td><span style="font-size: 14px;">从右到左</span></td>
+</tr>
+<tr>
+<td><span style="font-size: 14px;">=&nbsp;&nbsp;+=&nbsp;&nbsp;-=&nbsp;&nbsp;*=&nbsp;&nbsp;%=&nbsp;&nbsp;&lt;&lt;=&nbsp;&nbsp;&gt;&gt;=</span></td>
+<td><span style="font-size: 14px;">赋值</span></td>
+<td><span style="font-size: 14px;">从右到左</span></td>
+</tr>
+</tbody>
+</table>
+                    <p>要注意的是操作符有许多是带副作用的，比如自增自减或者赋值，错误的使用会让我们造成一些bug。</p>
+                    <p>同时系统都会为表达式计算一个值，利用带副作用的表达式我们可以写出一些比较简洁的语句。</p>
+                    <pre class="prettyprint linenums">
+function factorial (n) {
+    var result = 1;
+    while (result*=n--, n > 1) {
+        //empty loop
+    }
+    return result;
+}
+</pre>
                 </article>
 
                 <!-- 控制语句 -->
-                <article id="c1-06" class="hide">
+                <article id="c1-05" class="hide">
                     <h3>控制语句</h3>
+                    <p>流程语句对于习惯C妈妈一家子的编程小伙伴们来说是再熟悉不过的了在此就不啰嗦了，JavaScript里的控制语句也不外乎那几种：</p>
+                    <ul>
+                        <li>if else</li>
+                        <li>switch</li>
+                        <li>while</li>
+                        <li>do while</li>
+                        <li>for</li>
+                    </ul>
+                    <p>这里稍微提一个for循环的特例，在Javascript比较实用的用法</p>
+                    <pre class="prettyprint linenums">
+var obj = {x: 1, y: 2, z: 3};
+for (var p in obj) {
+    console.log(p + "=" + obj[p]); 
+}
+//这里要注意定义的变量p是一个字符串, obj.p就取不到了。
+</pre>
+                    <p></p>
                 </article>
 
                 <!-- 对象和数组 -->
-                <article id="c1-07" class="hide">
+                <article id="c1-06" class="hide">
                     <h3>对象和数组</h3>
+                    <p>一般我们提到的对象，都包含属性和方法。由于在Javascript中，方法，也就是函数本身也是一类对象，即一种数据类型。因此简单描述Javascript对象的话，它们就是一种属性名/值的无序集合。</p>
+                    <p>利用对象我们可以创造和模拟许多复杂的数据结构以满足我们的应用需求，简单对象的创建方法：</p>
+                    <pre class="prettyprint">
+var obj = {x: 1, y: 2}; //JSON
+var o = new Object(); // o的值即{}
+
+function dog(name, breed) {   //简单的构造函数
+    this.name = name;
+    this.breed = breed;
+}
+var Tom = new dog("Tom", "chiwawa"); // dog {name: "Tom", breed: "chiwawa"}
+</pre>
+                    <p>数组是一类特殊的对象：</p>
+                    <p>数组的值是有序集合。每一个值叫做一个元素。每个元素在数组中有个位置，以数字表示，称为索引。Javascript的数组是动态的，可以增长缩减，数组元素的数据类型是不固定的，甚至一个数组可以包含不同类型的元素，同时它可以是稀疏的。</p>
+                    <pre class="prettyprint">
+var a = [];         // 空数组
+a = new Array();    //同上
+a[1] = 1;           //给第二个元素赋值1
+alert(a[0]);        // undefined
+alert(a.length);    // 2
+a[0] = {x:1};
+console.log(a);     // [Object, 1]
+
+var b = [1, 2, 3];
+b[0];               // => 1
+b.length;           // => 3
+b[2] = undefined;
+b[1] = null;
+b;                  // => [1, null, undefined]
+b.length;           // => 3
+</pre>
+                    <p>数组还包括强大的内置方法，能帮助我们直接实现一些简单的数据结构，数组在Javascript编码中是非常常用的工具。</p>
+                    <p>比如利用push()和pop()方法可以将数组当栈使用：</p>
+                    <pre class="prettyprint linenums">
+var a = [1, 2, 3];
+a.pop();        // => 3
+a;              // => [1, 2]
+a.push(4);
+a;              // => [1, 2, 4]
+</pre>
+                    <p>splice()方法可以对数组进行裁剪，也是相当实用的方法：</p>
+                    <pre class="prettyprint linenums">
+var a = [1, 2, 3, 4, 5, 6, 7, 8]; //splice()方法返回被裁减的部分，原数组被修改
+a.splice(4);        // 返回[5, 6, 7, 8], a是[1, 2, 3, 4]
+a.splice(1, 2);     // 返回[2, 3], a是[1, 4]
+a.splice(1, 1);     // 返回[4]，a是[1]
+</pre>
+                    <p></p>
                 </article>
 
                 <!-- 函数的闭包 -->
-                <article id="c1-08" class="hide">
+                <article id="c1-07" class="hide">
                     <h3>函数的闭包</h3>
+                    <p>要理解Javascript的函数少不了对闭包的认识。然而在提闭包之前不得不先阐述变量的作用域。</p>
+                    <p>Javascript只有两种变量作用域：全局变量拥有全局作用域；局部变量只在函数内部有定义。简单的说就是里面能看到外面，外面看不到里面: )</p>
+                    <pre class="prettyprint linenums">
+var scope = "global";
+function checkscope() {
+    var scope = "local"; // 这里var声明局部新变量，否则将修改全局变量
+    return scope;
+}
+scope;           // => "global"
+checkscope();    // => "local"
+</pre>
+                    <p>声明提前：在函数体里声明的变量，实际都被提前至(未赋值)函数的顶部。</p>
+                    <pre class="prettyprint linenums">
+var scope = "global";
+function checkscope() {
+    alert(scope);             //将输出undefined
+    var scope = "local";
+    alert(scope);             //"local"
+}
+checkscope();
+
+//以上代码事实上等价于：
+var scope = "global";
+function checkscope() {
+    var scope;
+    alert(scope);
+    scope = "local";
+    alert(scope);
+}
+checkscope();
+</pre>
+                    <p>现在我们可以谈闭包了：闭包是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。下面举个实际的例子：</p>
+                    <pre class="prettyprint linenums">
+//最简单的闭包实现
+function createCounter() {
+    var num = 1;
+    function c() {
+        return num++;
+    }
+    return c;
+}
+var counter = createCounter();
+counter();  //=>1
+counter();  //=>2
+counter();  //=>3
+var counter2 = createCounter();
+counter2();  //=>1
+</pre>
+                    <p>闭包和this</p>
+                    <p>this关键字在Javascript中相当常用，在客户端中，作为对象的方法this指向方法挂载的对象本身，在一般函数或者全局中this都指window对象，特殊的，注册事件函数的this指向触发事件的DOM对象。举个例子：</p>
+                    <pre class="prettyprint linenums">
+var data = [{name: "a", value: 111}, {name: "b", value: 222}, {name: "c", value: 333}];
+Object.prototype.createButton = function (i) {
+    var that = this;             //这是利用闭包保留对象this引用的常见手段，因为在事件注册程序中this指向DOM元素本身
+    $button = $("&lt;button>" + this.name + "&lt;/button>").appendTo($("body")).click(function () {
+        alert(this);   //[object HTMLButtonElement]
+        alert(that.value);
+        alert(i);
+    });
+    return $button;
+}
+for (var i = 0; i < data.length; i++) {
+    data[i].createButton(i);
+}
+</pre>
+                    <p></p>
                 </article>
 
                 <!-- Javascript的继承 -->
-                <article id="c1-09" class="hide">
+                <article id="c1-08" class="hide">
                     <h3>Javascript的继承</h3>
+                    <p>Javascript和其它语言相比最古怪的地方就在于继承方式了。不同于一般面向对象语言使用类(class)，Javascript中就没有类，而是使用原型(prototype)的方式实现继承，对于初学Javascript的小伙伴们来说这个是比较容易产生困惑的。</p>
+                    <p>虽然不是每个前端“玩家”都会使用到原型，但是我认为掌握至少是认识prototype是非常有必要的。</p>
+                    <p></p>
+                    <p></p>
+                </article>
+
+                <!-- 什么是jQuery -->
+                <article id="c2-01" class="hide">
+                    <h3>什么是jQuery</h3>
+                    <p></p>
+                    <p></p>
+                </article>
+
+                <!-- 什么是jQuery对象 -->
+                <article id="c2-02" class="hide">
+                    <h3>什么是jQuery对象</h3>
+                </article>
+
+                <!-- 什么是jQuery工具函数 -->
+                <article id="c2-03" class="hide">
+                    <h3>什么是jQuery工具函数</h3>
+                </article>
+
+                <!-- jQuery选择器简述 -->
+                <article id="c2-04" class="hide">
+                    <h3>jQuery选择器简述</h3>
+                </article>
+
+                <!-- 常用jQuery方法 -->
+                <article id="c2-05" class="hide">
+                    <h3>常用jQuery方法</h3>
+                </article>
+
+                <!-- jQueryAjax -->
+                <article id="c2-06" class="hide">
+                    <h3>jQueryAjax</h3>
+                </article>
+
+                <!-- 链式调用和命名规范 -->
+                <article id="c2-07" class="hide">
+                    <h3>链式调用和命名规范</h3>
                 </article>
 
             </div><!-- main -->
@@ -168,12 +463,11 @@ o == j // =>true
                     <li><a href="#" data-chapter="c1-01">Javascript运行环境</a></li>
                     <li><a href="#" data-chapter="c1-02">数据类型和变量</a></li>
                     <li><a href="#" data-chapter="c1-03">值和引用</a></li>
-                    <li><a href="#" data-chapter="c1-04">this</a></li>
-                    <li><a href="#" data-chapter="c1-05">表达式和运算符</a></li>
-                    <li><a href="#" data-chapter="c1-06">控制语句</a></li>
-                    <li><a href="#" data-chapter="c1-07">对象和数组</a></li>
-                    <li><a href="#" data-chapter="c1-08">函数的闭包</a></li>
-                    <li><a href="#" data-chapter="c1-09">Javascript的继承</a></li>
+                    <li><a href="#" data-chapter="c1-04">表达式和运算符</a></li>
+                    <li><a href="#" data-chapter="c1-05">控制语句</a></li>
+                    <li><a href="#" data-chapter="c1-06">对象和数组</a></li>
+                    <li><a href="#" data-chapter="c1-07">函数的闭包</a></li>
+                    <li><a href="#" data-chapter="c1-08">Javascript的继承</a></li>
                   </ol>
                 </div>
 
@@ -186,8 +480,7 @@ o == j // =>true
                     <li><a href="#" data-chapter="c2-04">jQuery选择器简述</a></li>
                     <li><a href="#" data-chapter="c2-05">常用jQuery方法</a></li>
                     <li><a href="#" data-chapter="c2-06">jQueryAjax</a></li>
-                    <li><a href="#" data-chapter="c2-07">jQuery链式调用</a></li>
-                    <li><a href="#" data-chapter="c2-08">代码风格和命名规范</a></li>
+                    <li><a href="#" data-chapter="c2-07">链式调用和命名规范</a></li>
                   </ol>
                 </div>
             </div><!-- sidebar -->
