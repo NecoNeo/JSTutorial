@@ -7,7 +7,7 @@
     <meta name="description" content="JStutorial">
     <meta name="author" content="zdf">
 
-    <title>demo</title>
+    <title>Javascript学习笔记</title>
 
     <link href="css/prettify.css" rel="stylesheet">
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -450,9 +450,9 @@ for (var i = 0; i < data.length; i++) {
                     <p></p>
                 </article>
 
-                <!-- Javascript的继承 -->
+                <!-- Javascript的OOP -->
                 <article id="c1-08" class="hide">
-                    <h3>Javascript的继承</h3>
+                    <h3>Javascript的OOP</h3>
                     <p>Javascript和其它语言相比最古怪的地方就在于继承方式了。不同于一般面向对象语言使用类(class)，Javascript中就没有类，而是使用原型(prototype)的方式实现继承，对于初学Javascript的小伙伴们来说这个是比较容易产生困惑的。</p>
                     <p>虽然不是每个前端“玩家”都会使用到原型，但是我认为掌握至少是认识prototype是非常有必要的。<br /></p>
                     <p>有时候觉得千言万语不如一张图，找到了stackoverflow上的一张神图，非常犀利得阐述了原型链的运作方式：</p>
@@ -462,8 +462,65 @@ for (var i = 0; i < data.length; i++) {
                 <!-- 什么是jQuery -->
                 <article id="c2-01" class="hide">
                     <h3>什么是jQuery</h3>
-                    <p></p>
-                    <p></p>
+                    <p>国内许多所谓的速成宝书都喜欢在jQuery库上扯很多废话，其实关于jQuery的特性上我不想太啰嗦，因为库本身的作用就是用来帮助我们简化工作的复杂性的，我们不应该在某一个库上浪费太多学习时间上的成本。jQuery是本着"write less, do more"的思想上设计的，其核心在于解决浏览器的兼容性，在性能上的优化，以及提供功能强大的选择器简化我们的开发。<br /></p>
+                    <p>让我们直奔主题，要理解jQuery，首要的应该是去理解jQuery的架构思想：</p>
+                    <pre class="prettyprint linenums">
+//这里首先采用了一个匿名函数的调用，保证库中定义的变量不会污染全局的命名空间，这是一般js库的常用写法
+(function (window) {
+
+    //首先jQuery是个工厂函数，它返回一个对象
+    var jQuery = function (selector, context) {
+        return new jQuery.fn.init(selector, context);
+    };
+
+    //在这里定义了jQuery.fn来保存jQuery对象的各种方法
+    jQuery.fn = jQuery.prototype = {
+        constructor: jQuery,
+
+        init: function (selector, context) {
+            // 初始化的各种代码
+
+            return jQuery.makeArray( selector, this );
+            //这里我想指出，jQuery对象其实是继承自数组对象的，所以它的本质就是一个数组
+        },
+
+        //以及各种jQuery对象的方法
+        each    : function () {},
+        ready   : function () {},
+        eq      : function () {},
+        first   : function () {},
+        last    : function () {},
+        slice   : function () {},
+        map     : function () {},
+        end     : function () {},
+    };
+
+    //将jQuery.fn.init.prototype的引用指向jQuery.fn，因此jQuery对象都拥有相同的prototype能调用jQuery.fn中的所有方法
+    jQuery.fn.init.prototype = jQuery.fn;
+
+    jQuery.extend = jQuery.fn.extend = function() {
+        //jQuery对象扩展工具方法方法的实现
+    }
+
+    jQuery.extend({
+
+        //再将其它各种jQuery工具函数也扩展到jQuery函数对象上
+
+        noConflict      : function () {},
+        ready           : function () {},
+        isArray         : function () {},
+        isWindow        : function () {},
+        isNumeric       : function () {},
+        type            : function () {},
+        isPlainObject   : function () {},
+    });
+
+    //最后将jQuery( $ )的函数定义挂载到全局的window对象
+    window.jQuery = window.$ = jQuery;
+
+})(window);
+</pre>
+                    <p>有前面原生Javascript基础知识的话，要理解这些代码并不困难。这里基本就是jQuery库的简化构造，现在新版本的jQuery能支持AMD的模块化设计，虽然具体代码会有些差别，但是整体上的写法还是大同小异的</p>
                 </article>
 
                 <!-- 什么是jQuery对象 -->
@@ -491,9 +548,9 @@ for (var i = 0; i < data.length; i++) {
                     <h3>jQueryAjax</h3>
                 </article>
 
-                <!-- 链式调用和命名规范 -->
-                <article id="c2-07" class="hide">
-                    <h3>链式调用和命名规范</h3>
+                <!-- 简要的代码规范 -->
+                <article id="c3-01" class="hide">
+                    <h3>简要的代码规范</h3>
                 </article>
 
             </div><!-- main -->
@@ -508,7 +565,7 @@ for (var i = 0; i < data.length; i++) {
                     <li><a href="#" data-chapter="c1-05">控制语句</a></li>
                     <li><a href="#" data-chapter="c1-06">对象和数组</a></li>
                     <li><a href="#" data-chapter="c1-07">函数和闭包</a></li>
-                    <li><a href="#" data-chapter="c1-08">Javascript的继承</a></li>
+                    <li><a href="#" data-chapter="c1-08">Javascript的OOP</a></li>
                   </ol>
                 </div>
 
@@ -521,7 +578,13 @@ for (var i = 0; i < data.length; i++) {
                     <li><a href="#" data-chapter="c2-04">jQuery选择器简述</a></li>
                     <li><a href="#" data-chapter="c2-05">常用jQuery方法</a></li>
                     <li><a href="#" data-chapter="c2-06">jQueryAjax</a></li>
-                    <li><a href="#" data-chapter="c2-07">链式调用和命名规范</a></li>
+                  </ol>
+                </div>
+
+                <div class="sidebar-module">
+                  <h4>附录</h4>
+                  <ol class="list-unstyled">
+                    <li><a href="#" data-chapter="c3-01">简要的代码规范</a></li>
                   </ol>
                 </div>
             </div><!-- sidebar -->
