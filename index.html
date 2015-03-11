@@ -464,6 +464,7 @@ for (var i = 0; i < data.length; i++) {
                     <h3>什么是jQuery</h3>
                     <p>国内许多所谓的速成宝书都喜欢在jQuery库上扯很多废话，其实关于jQuery的特性上我不想太啰嗦，因为库本身的作用就是用来帮助我们简化工作的复杂性的，我们不应该在某一个库上浪费太多学习时间上的成本。jQuery是本着"write less, do more"的思想上设计的，其核心在于解决浏览器的兼容性，在性能上的优化，以及提供功能强大的选择器简化我们的开发。<br /></p>
                     <p>让我们直奔主题，要理解jQuery，首要的应该是去理解jQuery的架构思想：</p>
+                    <p>有前面Javascript基础知识的话，要理解这些代码并不困难。这里把jQuery库的构造简化了一下便于理解，现在新版本的jQuery能支持AMD的模块化设计，虽然具体代码会有些差别，但是整体上的思路还是大同小异的</p>
                     <pre class="prettyprint linenums">
 //这里首先采用了一个匿名函数的调用，保证库中定义的变量不会污染全局的命名空间，这是一般js库的常用写法
 (function (window) {
@@ -481,7 +482,7 @@ for (var i = 0; i < data.length; i++) {
             // 初始化的各种代码
 
             return jQuery.makeArray( selector, this );
-            //这里我想指出，jQuery对象其实是继承自数组对象的，所以它的本质就是一个数组
+            //这里我想指出，jQuery对象其实是一个类数组对象，它在形式上像一个数组数组
         },
 
         //以及各种jQuery对象的方法
@@ -520,22 +521,43 @@ for (var i = 0; i < data.length; i++) {
 
 })(window);
 </pre>
-                    <p>有前面原生Javascript基础知识的话，要理解这些代码并不困难。这里基本就是jQuery库的简化构造，现在新版本的jQuery能支持AMD的模块化设计，虽然具体代码会有些差别，但是整体上的写法还是大同小异的</p>
+                    <p></p>
                 </article>
 
                 <!-- 什么是jQuery对象 -->
                 <article id="c2-02" class="hide">
                     <h3>什么是jQuery对象</h3>
-                </article>
-
-                <!-- 什么是jQuery工具函数 -->
-                <article id="c2-03" class="hide">
-                    <h3>什么是jQuery工具函数</h3>
+                    <p>jQuery对象就是通过调用$()或者jQuery()返回的对象。</p>
+                    <p>分析过jQuery的源码我们知道jQuery本身是一个工厂函数，调用它会返回一个对象，而这个对象是一个类数组对象，它模拟了数组的特性(比如包含数字索引、length属性等)，所以我们调用jQuery函数返回的对象会以如下形式呈现：</p>
+                    <pre class="prettyprint">
+//jQuery对象中的元素可以是HTML的节点元素，也可以是Javascript对象(包括数组)。
+$("div");
+=>[&lt;div>...&lt;/div>, &lt;div>...&lt;/div>, &lt;div>...&lt;div>]
+var obj = new Object();
+$(obj);
+=>[Object]
+</pre>
+                    <p>当选择器没有选择到匹配HTML元素时jQuery返回空的jQuery对象: []</p>
+                    <p>所以我们要明白一点，jQuery对象的所有方法都是针对对象所包含的集合进行操作的，且jQuery对象不是HTML节点元素：</p>
+                    <pre class="prettyprint">
+//若HTML页面有唯一一个id为"foo"的div元素
+$("#foo") == document.getElementById("foo")  // => false
+$("#foo")[0] == document.getElementById("foo") //=> true
+</pre>
+                    <p>将HTML元素和jQuery对象混淆是初学易犯的错误之一，所以为了便于区分我们鼓励使用在jQuery对象前加上$符的命名规范：</p>
+                    <pre class="prettyprint">
+var $body = $("body");
+</pre>
                 </article>
 
                 <!-- jQuery选择器简述 -->
-                <article id="c2-04" class="hide">
+                <article id="c2-03" class="hide">
                     <h3>jQuery选择器简述</h3>
+                </article>
+
+                <!-- 什么是jQuery工具函数 -->
+                <article id="c2-04" class="hide">
+                    <h3>什么是jQuery工具函数</h3>
                 </article>
 
                 <!-- 常用jQuery方法 -->
@@ -574,8 +596,8 @@ for (var i = 0; i < data.length; i++) {
                   <ol class="list-unstyled">
                     <li><a href="#" data-chapter="c2-01">什么是jQuery</a></li>
                     <li><a href="#" data-chapter="c2-02">什么是jQuery对象</a></li>
-                    <li><a href="#" data-chapter="c2-03">什么是jQuery工具函数</a></li>
-                    <li><a href="#" data-chapter="c2-04">jQuery选择器简述</a></li>
+                    <li><a href="#" data-chapter="c2-03">jQuery选择器简述</a></li>
+                    <li><a href="#" data-chapter="c2-04">什么是jQuery工具函数</a></li>
                     <li><a href="#" data-chapter="c2-05">常用jQuery方法</a></li>
                     <li><a href="#" data-chapter="c2-06">jQueryAjax</a></li>
                   </ol>
