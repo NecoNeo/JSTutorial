@@ -375,8 +375,44 @@ a.splice(1, 1);     // 返回[4]，a是[1]
                     <p></p>
                 </article>
 
+                <!-- this -->
+                <article id="c1-07-01" class="hide">
+                    <h3>this</h3>
+                    <p>this在javascript中是个重要的关键字同时也是很容易犯错的点。</p>
+                    <p>但是总结下来也是很简单的，this的指向只有三种情况:</p>
+                    <ol>
+                        <li>在全局和函数作用域，this都指向全局对象，一般是window</li>
+                        <li>作为对象的方法this指向函数依附的对象</li>
+                        <li>调用HTML元素事件回调的时候this指向HTML元素本身</li>
+                    </ol>
+                    <pre class="prettyprint">
+function foo() {
+    function bar() {
+        console.log(this);
+    }
+    console.log(this); //window
+    bar();       //window
+}
+
+var obj = {
+    a: function() {
+        function b() {
+            console.log(this);
+        }
+        b();
+        console.log(this);
+    }
+};
+obj.a();    //先window后obj
+
+&lt;button onclick="alert(this);">&lt;/button>
+//HTML object
+</pre>
+                    <p></p>
+                </article>
+
                 <!-- 函数和闭包 -->
-                <article id="c1-07" class="hide">
+                <article id="c1-07-02" class="hide">
                     <h3>函数和闭包</h3>
                     <p>要理解Javascript的函数少不了对闭包的认识。然而在提闭包之前不得不先阐述变量的作用域。</p>
                     <p>Javascript只有两种变量作用域：全局变量拥有全局作用域；局部变量只在函数内部有定义。简单的说就是里面能看到外面，外面看不到里面: )</p>
@@ -443,7 +479,7 @@ Object.prototype.createButton = function (i) {
     });
     return $button;
 }
-for (var i = 0; i < data.length; i++) {
+for (var i = 0; i &lt; data.length; i++) {
     data[i].createButton(i);
 }
 </pre>
@@ -457,6 +493,40 @@ for (var i = 0; i < data.length; i++) {
                     <p>虽然不是每个前端“玩家”都会使用到原型，但是我认为掌握至少是认识prototype是非常有必要的。<br /></p>
                     <p>有时候觉得千言万语不如一张图，找到了stackoverflow上的一张神图，非常犀利得阐述了原型链的运作方式：</p>
                     <p><img src="pic/proto.png" style="width:90%;" /></p>
+                    <p>上面的三个大圆角矩形都是构造函数，而mycat和o则是对象，其它的则是prototype对象。用new关键字调用构造函数，我们创建了一个对象，构造函数中的this将指向构造出的对象本身，通过this.propertyName的方式可以给对象附加属性和方法。同时对象的原型：__proto__(为了便于理解用这个概念，是在firefox等一些浏览器可以访问到的内部属性，编写代码时强烈不建议用这个)则是构造函数的prototype, 当调用的对象找不到某个对应属性或方法时，回去找它的__proto__是否包含，若是没有，会一直向原型链上寻找直到null为止。如：</p>
+                    <p>调用var obj = {x: 1}的toString()方法，obj本身没有这个方法, 于是访问obj.__proto__也就是Object.prototype，其中有内置的toString方法。</p>
+                    <p>Object.prototype.__proto__指向null，这个是原型链的终点。</p>
+                    <p>这样我们就可以做一个简单继承范例了：</p>
+                    <pre class="prettyprint linenums">
+function Person (name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype = {
+    constructor: Person,
+    eat : function () {
+        alert("happy!");
+    },
+    sayHello: function () {
+        console.log("My name is " + this.name + "!");
+    }
+};
+
+function Employee (name, age, salary) {
+    this.salary = salary;
+    Person.call(this, name, age);
+}
+
+Employee.prototype = new Person();
+Employee.prototype.constructor = Employee;
+Employee.prototype.showSalary = function () {
+    console.log("My salary is " + this.salary + "yuan !");
+};
+
+var Tom = new Employee("Tom", 99, 1);
+</pre>
+                    <p></p>
                 </article>
 
                 <!-- 什么是jQuery -->
@@ -586,7 +656,8 @@ var $body = $("body");
                     <li><a href="#" data-chapter="c1-04">表达式和运算符</a></li>
                     <li><a href="#" data-chapter="c1-05">控制语句</a></li>
                     <li><a href="#" data-chapter="c1-06">对象和数组</a></li>
-                    <li><a href="#" data-chapter="c1-07">函数和闭包</a></li>
+                    <li><a href="#" data-chapter="c1-07-01">this</a></li>
+                    <li><a href="#" data-chapter="c1-07-02">函数和闭包</a></li>
                     <li><a href="#" data-chapter="c1-08">Javascript的OOP</a></li>
                   </ol>
                 </div>
