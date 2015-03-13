@@ -97,6 +97,21 @@ s.length // =>11
 s.split(" ") // => ["hello", "world"]分割字符串
 </pre>
 
+                    <p><br /></p>
+                    <h4>一些容易混淆的值</h4>
+                    <pre class="prettyprint">
+//undefined 一般代表未定义的值，经常是在判断某些错误时
+//null      一般是程序员主动赋予的，代表一些没意义的值
+undefined == null // => true
+undefined === null // => false
+undefined == 0 // => false 条件判断语句判断值的真假，但不表示undefined和0这两个假值就是相等的
+1/0 // => Infinity 在Javascript中0作为除数并不会报错，而是返回Infinity或者-Infinity
+-1/0 // => -Infinity
+0/0 // => NaN
+typeof NaN // => "number"
+NaN == NaN // false 这个是个比较有趣的返回值
+</pre>
+                    <p></p>
                 </article>
 
                 <!-- 值和引用 -->
@@ -614,6 +629,7 @@ $(obj);
 $("#foo") == document.getElementById("foo")  // => false
 $("#foo")[0] == document.getElementById("foo") //=> true
 </pre>
+                    <br />
                     <p>将HTML元素和jQuery对象混淆是初学易犯的错误之一，所以为了便于区分我们鼓励使用在jQuery对象前加上$符的命名规范：</p>
                     <pre class="prettyprint">
 var $body = $("body");
@@ -623,26 +639,166 @@ var $body = $("body");
                 <!-- jQuery选择器简述 -->
                 <article id="c2-03" class="hide">
                     <h3>jQuery选择器简述</h3>
-                </article>
+                    <p>通常我们可以向jQuery工厂函数传入一个<strong>字符串</strong>，jQuery将根据字符串提供的信息选择出页面中符合条件的DOM元素并包含到返回的jQuery对象中。这里列举一些常用的jQuery选择器：</p>
+                    <pre class="prettyprint">
+$("#elementId")    //选择id值为elementId的元素，页面中id对应的元素应当是唯一的
+$("div")           //选择所有的div标签元素
+$(".elementClass") //选择class属性为elementClass的所有元素
+$("*")             //选择文档中的所有的元素
 
-                <!-- 什么是jQuery工具函数 -->
-                <article id="c2-04" class="hide">
-                    <h3>什么是jQuery工具函数</h3>
+$("form input")    //选择所有的form元素中的input元素 
+$("#main > *")     //选择id值为main的所有的子元素 
+
+$("tr:first")      //选择所有tr元素的第一个 
+$("tr:last")       //选择所有tr元素的最后一个
+
+$("div[id]")       //选择所有含有id属性的div元素 
+$("input[name='newsletter']")   //选择所有的name属性等于'newsletter'的input元素
+
+//注意这种情况不是选择器的使用，而是创建一个新的DOM元素并返回包含其的jQuery对象
+$("&lt;div>&lt;/div>")
+</pre>
+                    <p><br /></p>
+                    <p>这里额外提一个会一起用到的jQuery对象方法</p>
+                    <pre class="prettyprint">
+$("div").find("p") //选择div元素下的所有p元素
+</pre>
                 </article>
 
                 <!-- 常用jQuery方法 -->
-                <article id="c2-05" class="hide">
+                <article id="c2-04" class="hide">
                     <h3>常用jQuery方法</h3>
+                    <p>jQuery对象有很多方法，将HTML元素用jQuery对象包装之后，我们可以不花太多精力在兼容性问题上而是直接调用jQuery对象提供的方法来对DOM元素进行操作。</p>
+                    <p>下面是一些常用的jQuery方法：</p>
+                    <pre class="prettyprint">
+//修改样式class
+$("#element").addClass("foo");
+$("#element").removeClass("foo");
+$("#element").hasClass("foo"); //判断是否包含class foo
+
+//属性修改
+$("#element").attr("foo"); //返回属性foo的值
+$("#element").attr("foo", "123"); //修改属性foo的值
+$("input#element").val(); //获取input框的value值
+$("input#element").val("123"); //修改input框的value值
+$("#element").html(); //获得该元素内的内容
+$("#element").html("123"); //获得该元素内的内容
+$("#element").empty() //将该元素的内容设置为空
+$("#element").text(); //获得该元素内的文本
+$("#element").text("123"); //获得该元素内的文本
+
+//DOM操作
+$("#element").append($("#element1")); //$("#element1")将作为$("#element")的字元素 返回$("#element")
+$("#element").appendTo($("#element1")); //$("#element")将作为$("#element1")的字元素 返回$("#element")
+$("#element").remove();
+
+//事件调用
+$("button").click(function() {alert(this);});
+$(document).ready(function() {});   //页面加载完成时调用函数
+//特殊地，$(document).ready()我们可以简写成下面的形式
+$(function () {
+    //code
+});
+</pre>
+                <h4>jQuery对象扩展的插件简述</h4>
+                <p>关于jQuery一开始我们就把源代码拆开来分析过了, jQuery对象的所有方法都继承自jQuery.fn，所以扩展jQuery对象的插件形式：</p>
+                <pre class="prettyprint">
+(function ($) {
+    $.fn.yourFnName = function () {
+        //your code
+    };
+})(jQuery);
+
+//或者
+(function ($) {
+    $.fn.extend({
+        yourFnName: function () {
+            //your code
+        }
+    });
+})(jQuery);
+
+//两种写法本质没有太大区别
+</pre>
+                <p>一个简单的例子：</p>
+                <pre class="prettyprint linenums">
+(function ($) {
+    $.fn.alertId = function () {
+        alert(this.attr("id") || "I have no Id!"); //this是调用这个方法的jQuery对象
+    };
+})(jQuery);
+</pre>
+                </article>
+
+                <!-- jQuery工具函数 -->
+                <article id="c2-05" class="hide">
+                    <h3>jQuery工具函数</h3>
+                    <p>jQuery提供了额外一组工具函数，这些函数不是jQuery对象的方法都是独立的函数。(它们作为jQuery函数对象的一个属性这样不会影响全局命名空间)</p>
+                    <p>用得比较多的jQuery工具函数比如类型检测的$.isNumeric(), 扩展对象的$.extend(), 还有就是非常重要的Ajax工具了：$.ajax(),$.post(),$.get()等等</p>
+
+                    <h4>jQuery工具函数的插件简述</h4>
+                    <p>jQuery工具函数直接储存在jQuery函数对象的命名空间下，一般我们的插件写法：</p>
+                    <pre class="prettyprint">
+(function ($) {
+    $.yourFnName = function () {
+        //your code
+    };
+})(jQuery);
+
+//或者
+(function ($) {
+    $.extend({
+        yourFnName: function () {
+            //your code
+        }
+    });
+})(jQuery);
+</pre>
+                    <p></p>
                 </article>
 
                 <!-- jQueryAjax -->
                 <article id="c2-06" class="hide">
                     <h3>jQueryAjax</h3>
+                    <p>因为兼容性的解决方案，我们经常使用jQuery提供的Ajax工具来解决前台和后台传输数据的需求。</p>
+                    <p>先来看一个完整版的工具$.ajax()</p>
+                    <p>$.ajax(json)函数需要一个传入一个对象，这个对象包含若干个参数, 如下：</p>
+                    <pre class="prettyprint linenums">
+$.ajax({
+    type: "GET",          //发送请求的类型
+    url:  "test/test.php",//发送请求的地址
+    data: {x:1, y:2},     //需要传输的数据在这里, data要求为字符串或者对象类型
+    dataType: "json",     //现在小伙伴们比较流行用'json', 其它还有'xml'等许多格式
+    success: function(data) {}//请求成功后的回调函数, data是服务器的返回信息
+});
+</pre>
+                    <p>其它还有一些参数详细的可以直接查看jQuery的文档。关于ajax的机制这里就不赘述，只要记住这个请求是<strong>异步</strong>的，这也就意味着这个ajax请求函数调用好之后就立刻执行下一步语句了，一般来说此时请求的执行还没有完毕。如果接下来的逻辑中有依赖请求答复的数据程序就无法正确执行，请务必把这些逻辑写在回调函数中。</p>
+                    <p><br /></p>
+                    <p>再描述一个我们常用的简单版的ajax函数, 可以只加入三个参数，url, 请求数据和回调函数:</p>
+                    <pre class="prettyprint linenums">
+$.post("ajax.jsp", {"data": "request"}, function (data) {
+    //回调
+});
+</pre>
+                    <p></p>
                 </article>
 
                 <!-- 简要的代码规范 -->
                 <article id="c3-01" class="hide">
                     <h3>简要的代码规范</h3>
+                    <p>在这里我觉得强调代码规范的重要性比描述具体的代码规范本身更重要了。这里一定要清楚一个本质，代码不仅是给机器解析的，更是给人阅读的，给别人，也可能是将来的自己。前端的代码比起后端更加凌乱而逻辑分散，所以好的代码规范就更加重要了。</p>
+                    <p>正确的换行：不要有多余的换行，声明区域和算法区域空行，不同逻辑的代码块间空行。</p>
+                    <p>合理的命名规范：变量的名称不是越简单越好，应当是在保证意义明确不会有歧义的基础上尽可能的简洁。真正做到代码的自注释(Self-Documenting Code)。</p>
+                    <p>注释也不是越多越好，好的注释应该是概括地描述一个方法，构造对象或者一段算法的意图，而不应该像英语会话书那样的一句一句翻译。</p>
+                    <p><br /></p>
+                    <p>JS目前统计下来比较通用的代码规范：更多的规范可以去找度娘</p>
+                    <ul>
+                        <li>4个空格缩进(而不是用tab)</li>
+                        <li>二元操作符两边空格</li>
+                        <li>函数参数与括号间无空格</li>
+                        <li>对象字面量的冒号后加空格，冒号前不加</li>
+                        <li>条件语句关键字后加空格</li>
+                    </ul>
                 </article>
 
             </div><!-- main -->
@@ -668,8 +824,8 @@ var $body = $("body");
                     <li><a href="#" data-chapter="c2-01">什么是jQuery</a></li>
                     <li><a href="#" data-chapter="c2-02">什么是jQuery对象</a></li>
                     <li><a href="#" data-chapter="c2-03">jQuery选择器简述</a></li>
-                    <li><a href="#" data-chapter="c2-04">什么是jQuery工具函数</a></li>
-                    <li><a href="#" data-chapter="c2-05">常用jQuery方法</a></li>
+                    <li><a href="#" data-chapter="c2-04">常用jQuery方法</a></li>
+                    <li><a href="#" data-chapter="c2-05">jQuery工具函数</a></li>
                     <li><a href="#" data-chapter="c2-06">jQueryAjax</a></li>
                   </ol>
                 </div>
